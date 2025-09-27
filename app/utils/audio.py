@@ -20,7 +20,6 @@ def analyze_audio(file_path: str) -> Tuple[int, str, str]:
     # Псевдотранскрипция: берём первые 20 секунд (или меньше)
     head_ms = min(20_000, len(seg))
     head = seg[:head_ms]
-    # Сгенерируем простой “фрагмент речи”: средняя громкость / RMS
     pseudo = f"Detected speech fragment: {head.dBFS:.1f} dBFS, RMS={head.rms}"
 
     # “Фейковый детектор тишины”

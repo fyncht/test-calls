@@ -24,7 +24,8 @@ class Call(Base):
     status: Mapped[CallStatus] = mapped_column(Enum(CallStatus), default=CallStatus.created, nullable=False)
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
-    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow,
+                                                 nullable=False)
 
     recording: Mapped["Recording"] = relationship(back_populates="call", uselist=False)
 
@@ -38,10 +39,10 @@ class Recording(Base):
     duration: Mapped[int | None] = mapped_column(Integer)  # seconds
     transcription: Mapped[str | None] = mapped_column(Text)
 
-    # опционально: информация о тишине (JSON как текст)
     silence_json: Mapped[str | None] = mapped_column(Text)
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
-    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow,
+                                                 nullable=False)
 
     call: Mapped[Call] = relationship(back_populates="recording")

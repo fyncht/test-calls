@@ -39,9 +39,11 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Call & Recording Service", lifespan=lifespan)
 app.mount("/media", StaticFiles(directory=settings.MEDIA_ROOT), name="media")
 
+
 @app.get("/ping")
 def ping():
     return "pong"
+
 
 @app.get("/health")
 async def health():
@@ -99,14 +101,15 @@ async def upload_recording(call_id: int, file: UploadFile = File(...), session: 
 async def get_call(call_id: int, session: AsyncSession = Depends(get_session)):
     stmt = (
         select(Call)
-        .options(selectinload(Call.recording))
-        .where(Call.id == call_id)
-        .limit(1)
+            .options(selectinload(Call.recording))
+            .where(Call.id == call_id)
+            .limit(1)
     )
     call = await session.scalar(stmt)
     if not call:
         raise HTTPException(status_code=404, detail="Call not found")
     return call
+
 
 @app.get("/calls", response_model=list[CallOut])
 async def search_calls(q: Optional[str] = Query(default=None, description="Query by phone (+7...)"),
@@ -119,9 +122,9 @@ async def search_calls(q: Optional[str] = Query(default=None, description="Query
     return rows
 
 
-
 def _signer() -> TimestampSigner:
     return TimestampSigner(settings.SECRET_KEY)
+
 
 @app.get("/calls/{call_id}/presign")
 async def get_presigned(call_id: int, session: AsyncSession = Depends(get_session)):
@@ -137,6 +140,7 @@ async def get_presigned(call_id: int, session: AsyncSession = Depends(get_sessio
         "url": f"/calls/{call_id}/download?token={token}",
         "ttl_seconds": settings.PRESIGN_TTL_SECONDS,
     }
+
 
 @app.get("/calls/{call_id}/download")
 async def download_presigned(call_id: int, token: str, session: AsyncSession = Depends(get_session)):
