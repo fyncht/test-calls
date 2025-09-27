@@ -129,7 +129,7 @@ PRESIGN_TTL_SECONDS=600
 
 ## Быстрый тест (manually)
 
-> Если на машине нет `ffmpeg`, можно сгенерировать WAV одной командой Python:
+> Если нет `ffmpeg`, можно сгенерировать WAV одной командой Python:
 
 ```bash
 python3 - <<'PY'
